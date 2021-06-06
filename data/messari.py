@@ -4,6 +4,7 @@ from datetime import datetime as dt
 import csv
 
 URL = "https://data.messari.io/api/v1/assets/btc/metrics"
+
 counter = 0
 with open('messari.csv', mode='a') as csv_file:
     fieldnames = ['price_timestamp', 'price']
@@ -15,8 +16,8 @@ with open('messari.csv', mode='a') as csv_file:
         json_data  = r.json()
         writer.writerow(
             {
-             'price_timestamp': str(json_data[0]['price_timestamp']),
-             'price': str(json_data[0]['price'])
+             'price_timestamp': str(json_data['status']['timestamp']),
+             'price': str(json_data['data']['market_data']['price_usd']),
             })
         counter = counter + 1
         time.sleep(60.0)
