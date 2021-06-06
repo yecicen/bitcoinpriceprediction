@@ -56,7 +56,7 @@ async def runWS():
                     start=datetime.now().time()
                     yesterdate=date.today()
                     #you can save the information to file
-                    with open(r'C:\workspace\python\data\bitmax.csv', mode='a') as csv_file:
+                    with open('bitmax.csv', mode='a') as csv_file:
                         fieldnames = ['time', 'askprice', 'bidprice', 'superprice']
                         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                         if not header_added:

@@ -6,7 +6,7 @@ import csv
 
 COINDESK_URL = "https://api.coindesk.com/v1/bpi/currentprice.json"
 counter = 0
-with open('data/coindesk.csv', mode='a') as csv_file:
+with open('coindesk.csv', mode='a') as csv_file:
     fieldnames = ['time', 'ISOTime', 'price']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
