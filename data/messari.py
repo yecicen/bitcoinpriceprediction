@@ -7,7 +7,7 @@ URL = "https://data.messari.io/api/v1/assets/btc/metrics"
 
 counter = 0
 with open('messari.csv', mode='a') as csv_file:
-    fieldnames = ['price_timestamp', 'price']
+    fieldnames = ['timestamp', 'price', 'volume']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
     writer.writeheader()
@@ -16,8 +16,9 @@ with open('messari.csv', mode='a') as csv_file:
         json_data  = r.json()
         writer.writerow(
             {
-             'price_timestamp': str(json_data['status']['timestamp']),
+             'timestamp': str(json_data['status']['timestamp']),
              'price': str(json_data['data']['market_data']['price_usd']),
+             'volume': str(json_data['data']['market_data']['volume_last_24_hours']),
             })
         counter = counter + 1
         time.sleep(60.0)

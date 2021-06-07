@@ -57,14 +57,14 @@ async def runWS():
                     yesterdate=date.today()
                     #you can save the information to file
                     with open('bitmax.csv', mode='a') as csv_file:
-                        fieldnames = ['time', 'askprice', 'bidprice', 'superprice']
+                        fieldnames = ['timestamp', 'askprice', 'bidprice', 'superprice']
                         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                         if not header_added:
                             writer.writeheader()
                             header_added = True
                         writer.writerow(
                             {
-                                'time': rightnow,
+                                'timestamp': rightnow,
                                 'askprice': askprice, 
                                 'bidprice': bidprice,
                                 'superprice': superprice,
