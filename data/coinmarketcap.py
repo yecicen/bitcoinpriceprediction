@@ -21,6 +21,7 @@ session.headers.update(headers)
 
 try:
     counter = 0
+    limit = 240
     with open('coinmarketcap.csv', mode='a') as csv_file:
         fieldnames = ['timestamp', 'price', 'volume']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -38,7 +39,7 @@ try:
                 })
             counter = counter + 1
             time.sleep(60.0)
-            if counter == 3:
+            if counter == limit:
                 break
 except (ConnectionError, Timeout, TooManyRedirects) as e:
     print(e)

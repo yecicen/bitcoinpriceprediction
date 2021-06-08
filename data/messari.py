@@ -6,6 +6,7 @@ import csv
 URL = "https://data.messari.io/api/v1/assets/btc/metrics"
 
 counter = 0
+limit = 240
 with open('messari.csv', mode='a') as csv_file:
     fieldnames = ['timestamp', 'price', 'volume']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -22,6 +23,6 @@ with open('messari.csv', mode='a') as csv_file:
             })
         counter = counter + 1
         time.sleep(60.0)
-        if counter == 3:
+        if counter == limit:
             break
 

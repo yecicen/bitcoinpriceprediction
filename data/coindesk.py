@@ -6,6 +6,7 @@ import csv
 
 COINDESK_URL = "https://api.coindesk.com/v1/bpi/currentprice.json"
 counter = 0
+limit = 240
 with open('coindesk.csv', mode='a') as csv_file:
     fieldnames = ['timestamp', 'ISOTime', 'price']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -21,5 +22,5 @@ with open('coindesk.csv', mode='a') as csv_file:
             })
         counter = counter + 1
         time.sleep(60.0)
-        if counter == 1800:
+        if counter == limit:
             break

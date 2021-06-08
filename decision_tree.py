@@ -6,6 +6,7 @@ We'll write a Decision Tree Classifier, in pure Python.
 # For Python 2 / 3 compatability
 from __future__ import print_function
 
+import data_provider as dp
 # Toy dataset.
 # Format: each row is an example.
 # The last column is the label.
@@ -14,18 +15,20 @@ from __future__ import print_function
 # Interesting note: I've written this so the 2nd and 5th examples
 # have the same features, but different labels - so we can see how the
 # tree handles this case.
-training_data = [
-    ['coindesk', 20, '37'],
-    ['binance', 50, '36'],
-    ['bitmax', 30, '37'],
-    ['coindesk', 30, '38'],
-    ['binance', 50, '38'],
-    ['bitmax', 20, '38'],
-    ['coindesk', 30, '39'],
-    ['binance', 60, '39'],
-    ['bitmax', 10, '38'],
-]
-
+# training_data = [
+#     ['coindesk', 20, '37'],
+#     ['binance', 50, '36'],
+#     ['bitmax', 30, '37'],
+#     ['coindesk', 30, '38'],
+#     ['binance', 50, '38'],
+#     ['bitmax', 20, '38'],
+#     ['coindesk', 30, '39'],
+#     ['binance', 60, '39'],
+#     ['bitmax', 10, '38'],
+# ]
+training_data = dp.getData()
+print("-----------------")
+print(training_data)
 # Column labels.
 # These are used only to print the tree.
 header = ["source", "volume", "price"]
