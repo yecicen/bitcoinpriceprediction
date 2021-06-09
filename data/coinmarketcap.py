@@ -4,6 +4,7 @@ import json
 import time
 import csv
 import config
+import dateutil.parser
 
 url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 parameters = {
@@ -33,10 +34,10 @@ try:
             print(json_data['data'][0])
             writer.writerow(
                 {
-                'timestamp': str(json_data['status']['timestamp']),
-                'price': str(json_data['data'][0]['quote']['USD']['price']),
-                'volume': str(json_data['data'][0]['quote']['USD']['volume_24h'])
-                })
+             'timestamp': int(dateutil.parser.parse(str(json_data['status']['timestamp'])).timestamp()),
+             'price': format(float(json_data['data'][0]['quote']['USD']['price']), ".6f"),
+             'volume': format(float(json_data['data'][0]['quote']['USD']['volume_24h']), ".6f"),
+            })
             counter = counter + 1
             time.sleep(60.0)
             if counter == limit:
