@@ -26,12 +26,10 @@ import data_provider as dp
 #     ['binance', 60, '39'],
 #     ['bitmax', 10, '38'],
 # ]
-training_data = dp.getData()
-print("-----------------")
-print(training_data)
+training_data, testing_data = dp.getData()
 # Column labels.
 # These are used only to print the tree.
-header = ["source", "volume", "price"]
+header = ["source", "timestamp", "volume", "price"]
 
 
 def unique_vals(rows, col):
@@ -405,18 +403,18 @@ if __name__ == '__main__':
     print_tree(my_tree)
 
     # Evaluate
-    testing_data = [
-        ['coindesk', 20, 39],
-        ['binance', 60, 39],
-        ['bitmax', 20, 39],
-        ['coindesk', 20, 38],
-        ['binance', 60, 38],
-        ['bitmax', 20, 38],
-        ['bitmax', 20, 39],
-        ['coindesk', 20, 37],
-        ['binance', 60, 38],
-        ['bitmax', 20, 37],
-    ]
+    # testing_data = [
+    #     ['coindesk', 20, 39],
+    #     ['binance', 60, 39],
+    #     ['bitmax', 20, 39],
+    #     ['coindesk', 20, 38],
+    #     ['binance', 60, 38],
+    #     ['bitmax', 20, 38],
+    #     ['bitmax', 20, 39],
+    #     ['coindesk', 20, 37],
+    #     ['binance', 60, 38],
+    #     ['bitmax', 20, 37],
+    # ]
 
     for row in testing_data:
         print ("Actual: %s. Predicted: %s" %
