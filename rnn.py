@@ -10,12 +10,12 @@ device = torch.device('cpu')
 
 # Hyper-parameters 
 # input_size = 784 # 28x28
-num_classes = 4
+num_classes = 1
 num_epochs = 2
 batch_size = 100
 learning_rate = 0.001
 
-input_size = 4
+input_size = 1
 # sequence_length = 28
 hidden_size = 128
 num_layers = 2
@@ -90,14 +90,16 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 # Train the model
 n_total_steps = len(train_loader)
 for epoch in range(num_epochs):
-    for i, (timestamp,price) in enumerate(train_loader):  
+    for i, (source,timestamp,price, volume ) in enumerate(train_loader):  
         # origin shape: [N, 1, 28, 28]
         # resized: [N, 28, 28]
         # images = images.reshape(-1, sequence_length, input_size).to(device)
         # labels = labels.to(device)
+        timestamp = timestamp.to(device)
+        price = price.to(device)
         
         # Forward pass
-        outputs = model(timestamp, price)
+        outputs = model(timestamp)
         loss = criterion(outputs)
         
         # Backward and optimize
@@ -113,10 +115,10 @@ for epoch in range(num_epochs):
 with torch.no_grad():
     n_correct = 0
     n_samples = 0
-    for timestamp,price in test_loader:
+    for source,timestamp,price, volume in test_loader:
         # images = images.reshape(-1, sequence_length, input_size).to(device)
         # labels = labels.to(device)
-        outputs = model(timestamp,price)
+        outputs = model(timestamp)
         # max returns (value ,index)
         _, predicted = torch.max(outputs.price, 1)
         # n_samples += labels.size(0)

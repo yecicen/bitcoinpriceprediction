@@ -2,6 +2,9 @@ import csv
 import math 
 import torch
 from torch.utils.data import Dataset
+import numpy as np
+import matplotlib.pyplot as plt
+
 class CustomData(Dataset):
     def __init__(self, source, timestamp, price, volume):
         self.source = source
@@ -10,8 +13,11 @@ class CustomData(Dataset):
         self.price = price
     def len(self):
         return len(self.source)
+    def __len__(self):
+        return len(self.source)
     def get(self, idx):
-        #https://pytorch.org/tutorials/beginner/basics/data_tutorial.html
+        return self.source[idx], self.timestamp[idx], self.volume[idx], self.price[idx]
+    def __getitem__(self, idx):
         return self.source[idx], self.timestamp[idx], self.volume[idx], self.price[idx]
 
 def getDataSet():
@@ -32,7 +38,16 @@ def getDataSet():
             price.append(float(row["price"]))
             volume.append(float(row["volume"]))
             line_count += 1
-            
+
+        data = np.empty((1,len(price)), 'double')
+        # data = []
+        for i in range(1):
+            # data.append([price[i]])
+            # data[i] = np.array(range(len(price))) + price[i] np.array(price)
+            data[i] = np.array(price)
+            # data[i] = np.interp(np.asarray(price), (np.asarray(price).min(), np.asarray(price).max()), (0, 1))
+        print(f"max {np.asarray(price).max()}")
+        torch.save(data, open('traindata.pt', 'wb'))    
     with open('data/nomics.csv', mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
@@ -68,4 +83,5 @@ def getDataSet():
     test_volume = volume[(math.ceil(len(volume)*0.7)):]
     train_dataset = CustomData(train_source,train_timestamp,train_price,train_volume)
     test_dataset = CustomData(test_source,test_timestamp,test_price,test_volume)
+    
     return train_dataset, test_dataset
