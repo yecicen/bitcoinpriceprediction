@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd 
 from pylab import plt
 import math
-# from operator import itemgetter
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 import torch
@@ -87,7 +86,7 @@ loss_fn = torch.nn.MSELoss()
 optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
 
 # Train model
-num_epochs = 100
+num_epochs = 500
 hist = np.zeros(num_epochs)
 
 # Number of steps to unroll
