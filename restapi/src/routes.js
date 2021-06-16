@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const bookingModule = require('./modules/booking');
+const bitcoinModule = require('./modules/bitcoin');
 
-router.use('/booking', bookingModule.router);
+router.use('/bitcoin', bitcoinModule.router);
 
 module.exports = router;

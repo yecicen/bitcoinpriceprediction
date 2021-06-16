@@ -72,7 +72,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="h-20 text-xl text-white text-center">Bitcoin Price Prediction using LSTM Model</h1>
-      <main className="flex flex-col items-center justify-center w-full px-5 md:px-20 flex-1 text-center">
+      <main className="flex flex-col items-center justify-center w-full md:w-2/3 px-5 md:px-20 flex-1 text-center">
 
           <ResponsiveContainer height={500}>
             <LineChart data={data} className="bg-gray-800"
