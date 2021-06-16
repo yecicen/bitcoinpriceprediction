@@ -5,77 +5,92 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 export default function Home() {
   const data = [
     {
-      "name": "Page A",
-      "uv": 4000,
-      "pv": 2400,
-      "amt": 2400
+      "date": "14:30",
+      "price": 37000,
+      "predict": 38000,
+      "source": "Nomics"
     },
     {
-      "name": "Page B",
-      "uv": 3000,
-      "pv": 1398,
-      "amt": 2210
+      "date": "14:35",
+      "price": 35000,
+      "predict": 34000,
+      "source": "Nomics"
     },
     {
-      "name": "Page C",
-      "uv": 2000,
-      "pv": 9800,
-      "amt": 2290
+      "date": "14:40",
+      "price": 36500,
+      "predict": 37100,
+      "source": "Nomics"
     },
     {
-      "name": "Page D",
-      "uv": 2780,
-      "pv": 3908,
-      "amt": 2000
+      "date": "14:45",
+      "price": 36900,
+      "predict": 38000,
+      "source": "Nomics"
     },
     {
-      "name": "Page E",
-      "uv": 1890,
-      "pv": 4800,
-      "amt": 2181
+      "date": "14:50",
+      "price": 36000,
+      "predict": 37000,
+      "source": "Nomics"
     },
     {
-      "name": "Page F",
-      "uv": 2390,
-      "pv": 3800,
-      "amt": 2500
+      "date": "14:55",
+      "price": 37000,
+      "predict": 38000,
+      "source": "Nomics"
     },
     {
-      "name": "Page G",
-      "uv": 3490,
-      "pv": 4300,
-      "amt": 2100
-    }
+      "date": "15:00",
+      "price": 35000,
+      "predict": 34000,
+      "source": "Nomics"
+    },
+    {
+      "date": "15:05",
+      "price": 36500,
+      "predict": 37100,
+      "source": "Nomics"
+    },
+    {
+      "date": "15:10",
+      "price": 36900,
+      "predict": 38000,
+      "source": "Nomics"
+    },
+    {
+      "date": "15:15",
+      "price": 36000,
+      "predict": 37000,
+      "source": "Nomics"
+    },
   ]
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
-        <title>Create Next App</title>
+        <title>Bitcoin Price Prediction</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <h1 className="h-20 mt-40 text-xl">Bitcoin Price Prediction using LSTM Model</h1>
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <LineChart width={730} height={250} data={data}
+        
+        <div>
+        <LineChart width={800} height={300} data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <CartesianGrid strokeDasharray="5 5" />
+          <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="price" stroke="#8884d8" />
+          <Line type="monotone" dataKey="predict" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="source" stroke="red" />
         </LineChart>
+        </div>
+        
       </main>
-
+      
       <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
+        Developed by @yecicen
       </footer>
     </div>
   )
