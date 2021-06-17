@@ -18,6 +18,10 @@ const bitcoinSchema = new Schema({
     type: Number,
     required: true,
   },
+  prediction: {
+    type: Number,
+    required: true,
+  },
   volume: {
     type: Number,
     required: false,

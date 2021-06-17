@@ -1,3 +1,4 @@
+from time import time
 import numpy as np
 import pandas as pd 
 from pylab import plt
@@ -6,12 +7,9 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 import torch
 import torch.nn as nn
+import requests 
+import datetime
 
-
-df_btc=pd.read_csv("kgdata.csv", parse_dates=True, index_col=0)
-
-scaler = MinMaxScaler(feature_range=(-1, 1))
-df_btc['Price'] = scaler.fit_transform(df_btc['Price'].values.reshape(-1,1))
 
 
 def load_data(btc_data, look_back):
@@ -34,13 +32,6 @@ def load_data(btc_data, look_back):
     
     return [x_train, y_train, x_test, y_test]
 
-look_back = 30 
-x_train, y_train, x_test, y_test = load_data(df_btc, look_back)
-
-x_train = torch.from_numpy(x_train).type(torch.Tensor)
-x_test = torch.from_numpy(x_test).type(torch.Tensor)
-y_train = torch.from_numpy(y_train).type(torch.Tensor)
-y_test = torch.from_numpy(y_test).type(torch.Tensor)
 
 
 # model
@@ -78,65 +69,108 @@ class LSTM(nn.Module):
         # step the hidden states
         out = self.fc(out[:, -1, :]) 
         return out
-    
-model = LSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
 
-loss_fn = torch.nn.MSELoss()
+def run():
+    df_btc=pd.read_csv("nomicsNew.csv", parse_dates=True,index_col=0)
+    last_date = df_btc.index[-1]
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+    df_btc['Price'] = scaler.fit_transform(df_btc['Price'].values.reshape(-1,1))
 
-optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
 
-# Train model
-num_epochs = 500
-hist = np.zeros(num_epochs)
+    look_back = 30 
+    x_train, y_train, x_test, y_test = load_data(df_btc, look_back)
 
-# Number of steps to unroll
-seq_dim =look_back-1  
+    x_train = torch.from_numpy(x_train).type(torch.Tensor)
+    x_test = torch.from_numpy(x_test).type(torch.Tensor)
+    y_train = torch.from_numpy(y_train).type(torch.Tensor)
+    y_test = torch.from_numpy(y_test).type(torch.Tensor)
 
-for t in range(num_epochs):
-    # Forward pass
-    y_train_pred = model(x_train)
 
-    loss = loss_fn(y_train_pred, y_train)
-    if t % 10 == 0 and t !=0:
-        print("Epoch ", t, "MSE: ", loss.item())
-    hist[t] = loss.item()
 
-    # detach gradients
-    optimiser.zero_grad()
+    model = LSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
 
-    # Backward pass
-    loss.backward()
+    loss_fn = torch.nn.MSELoss()
 
-    # Update parameters
-    optimiser.step()
+    optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
 
-# make predictions
-y_test_pred = model(x_test)
+    # Train model
+    num_epochs = 100
+    hist = np.zeros(num_epochs)
 
-# invert predictions
-y_train_pred = scaler.inverse_transform(y_train_pred.detach().numpy())
-y_train = scaler.inverse_transform(y_train.detach().numpy())
-y_test_pred = scaler.inverse_transform(y_test_pred.detach().numpy())
-y_test = scaler.inverse_transform(y_test.detach().numpy())
+    # Number of steps to unroll
+    seq_dim =look_back-1  
 
-# calculate root mean squared error
-trainScore = math.sqrt(mean_squared_error(y_train[:,0], y_train_pred[:,0]))
-print('Train Score: %.2f RMSE' % (trainScore))
-testScore = math.sqrt(mean_squared_error(y_test[:,0], y_test_pred[:,0]))
-print('Test Score: %.2f RMSE' % (testScore))
+    for t in range(num_epochs):
+        # Forward pass
+        y_train_pred = model(x_train)
 
-# Visualising the results
-figure, axes = plt.subplots(figsize=(15, 6))
-axes.xaxis_date()
+        loss = loss_fn(y_train_pred, y_train)
+        if t % 10 == 0 and t !=0:
+            print("Epoch ", t, "MSE: ", loss.item())
+        hist[t] = loss.item()
 
-axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test, color = 'green', label = 'Real BTC Price')
-axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test_pred, color = 'blue', label = 'Predicted BTC Price')
+        # detach gradients
+        optimiser.zero_grad()
 
-pred_next_five_min = y_test_pred[-1] #post this data to website
-print(f"prediction in the next 5 minute: {pred_next_five_min}")
-plt.title('BTC Price Prediction')
-plt.xlabel('Time')
-plt.ylabel('BTC Price')
-plt.legend()
-plt.savefig('BTC_pred.png')
-plt.show()
+        # Backward pass
+        loss.backward()
+
+        # Update parameters
+        optimiser.step()
+
+    # make predictions
+    y_test_pred = model(x_test)
+
+    # invert predictions
+    y_train_pred = scaler.inverse_transform(y_train_pred.detach().numpy())
+    y_train = scaler.inverse_transform(y_train.detach().numpy())
+    y_test_pred = scaler.inverse_transform(y_test_pred.detach().numpy())
+    y_test = scaler.inverse_transform(y_test.detach().numpy())
+
+    # calculate root mean squared error
+    trainScore = math.sqrt(mean_squared_error(y_train[:,0], y_train_pred[:,0]))
+    print('Train Score: %.2f RMSE' % (trainScore))
+    testScore = math.sqrt(mean_squared_error(y_test[:,0], y_test_pred[:,0]))
+    print('Test Score: %.2f RMSE' % (testScore))
+
+    # Visualising the results
+    figure, axes = plt.subplots(figsize=(15, 6))
+    axes.xaxis_date()
+
+    axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test, color = 'green', label = 'Real BTC Price')
+    axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test_pred, color = 'blue', label = 'Predicted BTC Price')
+
+    predValue = y_test_pred[-1][0] #post this data to website
+
+    #when time is 5 minutes, get actual price, and send the prediction to api
+    URL = "https://data.messari.io/api/v1/assets/btc/metrics"
+    counter = 0
+    print(f"last_date {last_date}")
+    predictDate = last_date.strftime("%Y-%m-%d %H:%M:%S")
+    while True:
+        dateString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if predictDate < dateString:
+            print("inside lstm if date")
+            if counter == 0:
+                counter = counter + 1
+                r = requests.get(url = URL) 
+                json_data  = r.json()
+                actual_price = format(float(json_data['data']['market_data']['price_usd']), ".6f")
+                print(f"time: {last_date} predicted: {predValue} actual price: {actual_price}")
+
+                apiURL = 'https://bitcoinpriceprediction-mu.herokuapp.com/api/bitcoin'
+                myobj = {'date': dateString, "price":actual_price, "prediction":predValue}
+
+                x = requests.post(apiURL, data = myobj)
+
+                print(x.text)
+
+                break
+
+
+    # plt.title('BTC Price Prediction')
+    # plt.xlabel('Time')
+    # plt.ylabel('BTC Price')
+    # plt.legend()
+    # plt.savefig('BTC_pred.png')
+    # plt.show()
