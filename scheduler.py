@@ -1,8 +1,8 @@
 import time
-import kg_data
+import data_prep
 import lstm
 while True:
     lstm.run()
     time.sleep(30.0)
-    kg_data.prepare()
+    data_prep.prepare()
     time.sleep(30.0)

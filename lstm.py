@@ -9,7 +9,9 @@ import torch
 import torch.nn as nn
 import requests 
 import datetime
+import data.config as config
 
+NOMICS_URL = f'https://api.nomics.com/v1/currencies/ticker?key={config.getApiKey("nomics")}&ids=BTC&interval=1d&convert=USD&per-page=100&page=1'
 
 
 def load_data(btc_data, look_back):
@@ -143,20 +145,17 @@ def run():
     predValue = y_test_pred[-1][0] #post this data to website
 
     #when time is 5 minutes, get actual price, and send the prediction to api
-    URL = "https://data.messari.io/api/v1/assets/btc/metrics"
     counter = 0
-    print(f"last_date {last_date}")
     predictDate = last_date.strftime("%Y-%m-%d %H:%M:%S")
     while True:
         dateString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if predictDate < dateString:
-            print("inside lstm if date")
             if counter == 0:
                 counter = counter + 1
-                r = requests.get(url = URL) 
+                r = requests.get(url = NOMICS_URL) 
                 json_data  = r.json()
-                actual_price = format(float(json_data['data']['market_data']['price_usd']), ".6f")
-                print(f"time: {last_date} predicted: {predValue} actual price: {actual_price}")
+                actual_price = format(float(json_data[0]['price']), ".6f")
+                print(f"time: {dateString} predicted: {predValue} actual price: {actual_price}")
 
                 apiURL = 'https://bitcoinpriceprediction-mu.herokuapp.com/api/bitcoin'
                 myobj = {'date': dateString, "price":actual_price, "prediction":predValue}

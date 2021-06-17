@@ -16,7 +16,6 @@ def prepare():
     with open('data/nomics.csv', mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
-        print("here")
         for row in csv_reader:
             if line_count == 0:
                 line_count += 1

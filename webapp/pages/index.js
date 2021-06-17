@@ -14,6 +14,7 @@ export async function getServerSideProps(context) {
       item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14,16)}`;
       item.price = item['price'].toFixed(3)
       item.prediction = item['prediction'].toFixed(3)
+      item['difference'] = Math.abs(item['prediction'] - item['price'])
   })
   initialData = initialData.slice(-10)
   // initialData = initialData.filter((item) => item.date == date && item.centerId == testcenterID)
@@ -42,6 +43,7 @@ export default function Home({ initialData }) {
               <Tooltip />
               <Line type="monotone" dataKey="price" stroke="#8884d8" />
               <Line type="basis" dataKey="prediction" stroke="#82ca9d" />
+              {/* <Line type="basis" dataKey="difference" stroke="#eba959" /> */}
               {/* <Line type="step" dataKey="source" stroke="red" /> */}
             </LineChart>
           </ResponsiveContainer>
