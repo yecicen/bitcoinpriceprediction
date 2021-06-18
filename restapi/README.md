@@ -1,8 +1,6 @@
 
 ---
 
-# testbooking-back
-
 A Node.js app using [Express library](http://expressjs.com/).
 
 ## Cloning Locally and installing packages
@@ -10,8 +8,6 @@ A Node.js app using [Express library](http://expressjs.com/).
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
 
 ```sh
-git clone git@bitbucket.org:yecicen/testbooking-back.git # or clone your own fork
-cd testbooking-back
 npm install
 ```
 ## Configuring
@@ -25,7 +21,7 @@ Edit the .env file for your configuration
 ```
 npm start
 ```
-Your app should now be running on [localhost:3000](http://localhost:3000/).
+Your app should now be running on [localhost:8000](http://localhost:8000/).
 
 ## Deploying to Heroku
 

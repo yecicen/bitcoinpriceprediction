@@ -96,7 +96,7 @@ def run():
     optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
 
     # Train model
-    num_epochs = 100
+    num_epochs = 200
     hist = np.zeros(num_epochs)
 
     # Number of steps to unroll
@@ -136,13 +136,13 @@ def run():
     print('Test Score: %.2f RMSE' % (testScore))
 
     # Visualising the results
-    figure, axes = plt.subplots(figsize=(15, 6))
-    axes.xaxis_date()
+    # figure, axes = plt.subplots(figsize=(15, 6))
+    # axes.xaxis_date()
 
-    axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test, color = 'green', label = 'Real BTC Price')
-    axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test_pred, color = 'blue', label = 'Predicted BTC Price')
+    # axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test, color = 'green', label = 'Real BTC Price')
+    # axes.plot(df_btc[len(df_btc)-len(y_test):].index, y_test_pred, color = 'blue', label = 'Predicted BTC Price')
 
-    predValue = y_test_pred[-1][0] #post this data to website
+    predicted_price = y_test_pred[-1][0] #post this data to website
 
     #when time is 5 minutes, get actual price, and send the prediction to api
     counter = 0
@@ -152,19 +152,37 @@ def run():
         if predictDate < dateString:
             if counter == 0:
                 counter = counter + 1
-                r = requests.get(url = NOMICS_URL) 
-                json_data  = r.json()
-                actual_price = format(float(json_data[0]['price']), ".6f")
-                print(f"time: {dateString} predicted: {predValue} actual price: {actual_price}")
+                try:
+                    r = requests.get(url = NOMICS_URL) 
+                    json_data  = r.json()
+                    actual_price = format(float(json_data[0]['price']), ".6f")
+                    rate = format(((float(predicted_price) - float(actual_price)) /float(predicted_price)), ".6f")
+                    trend = "Neutral"
+                    if(float(rate) > 0):
+                        trend = "Up"
+                    elif(float(rate) < 0):
+                        trend = "Down"
+                    print(f"time: {dateString} predicted: {predicted_price} actual price: {actual_price} rate: {rate}")
+                    timestamp = datetime.datetime.now().timestamp()
+                    apiURL = 'https://bitcoinpriceprediction-mu.herokuapp.com/api/bitcoin'
+                    myobj = {
+                        'date': dateString,
+                        'timestamp': timestamp, 
+                        'price':actual_price, 
+                        'prediction':predicted_price, 
+                        'rate': rate,
+                        'trend': trend
+                        }
 
-                apiURL = 'https://bitcoinpriceprediction-mu.herokuapp.com/api/bitcoin'
-                myobj = {'date': dateString, "price":actual_price, "prediction":predValue}
+                    x = requests.post(apiURL, data = myobj)
 
-                x = requests.post(apiURL, data = myobj)
+                    print(x.text)
 
-                print(x.text)
+                    break
+                except:
+                    print("Error")
+                    break
 
-                break
 
 
     # plt.title('BTC Price Prediction')

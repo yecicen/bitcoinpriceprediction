@@ -24,21 +24,30 @@ def prepare():
             prices.append(float(row["price"]))
             data.append(special_data)
             line_count += 1
-        mean_price = format(np.mean(np.asarray(prices)), ".6f")
         
-        for i in range(3):
+        for i in range(4):
             prediction_date = last_date + datetime.timedelta(minutes = (i+1))
-            data.append([prediction_date, mean_price])
-    with open('nomicsNew.csv', mode='w') as csv_file:
-        fieldnames = ['Date', 'Price']
+            data.append([prediction_date, prices[-1:][0]])
+    with open('updown.csv', mode='w') as csv_file:
+        fieldnames = ['Date', 'Trend', 'Rate']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        slicedData = data[-240:]
-        for line in slicedData:
+
+        slicedData = data[-244:]
+        print(slicedData[0][1])
+        for i in range(len(slicedData)-1):
+            trend = 0
+            price = slicedData[i][1]
+            next_price = slicedData[(i+1)][1]
+            rate = (float(next_price) - float(price)) / (float(next_price))
+            print(f"price {price} next_price {next_price} rate {rate}")
+            if(price < next_price):
+                trend = 1
             writer.writerow(
             {
-                'Date': line[0],
-                'Price': line[1]
+                'Date': slicedData[i][0],
+                'Trend': trend,
+                "Rate": rate
             })
     print(f"data prepared successfully, last prediction date is {prediction_date}")
 prepare()

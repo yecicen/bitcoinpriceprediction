@@ -30,6 +30,14 @@ const bitcoinSchema = new Schema({
     type: Number,
     required: false,
   },
+  rate: {
+    type: Number,
+    required: false,
+  },
+  trend: {
+    type: String,
+    required: false,
+  },
 }, {
   toObject: {
     virtuals: true,
@@ -39,9 +47,7 @@ const bitcoinSchema = new Schema({
   },
 });
 
-// eslint-disable-next-line func-names
 bitcoinSchema.virtual('id').get(function () {
-  // eslint-disable-next-line no-underscore-dangle
   return this._id;
 });
 

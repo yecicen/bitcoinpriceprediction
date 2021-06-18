@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-
+import CustomTooltip from '../components/customTooltip'
 export async function getServerSideProps(context) {
   let url = 'https://bitcoinpriceprediction-mu.herokuapp.com/api/bitcoin';
   const res = await fetch(url, {
@@ -12,9 +12,9 @@ export async function getServerSideProps(context) {
   let initialData = await res.json()
   initialData.map(item => {
       item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14,16)}`;
-      item.price = item['price'].toFixed(3)
-      item.prediction = item['prediction'].toFixed(3)
-      item['difference'] = Math.abs(item['prediction'] - item['price'])
+      item.price = item['price'].toFixed(3);
+      item.prediction = item['prediction'].toFixed(3);
+      item['difference'] = Math.abs(item['prediction'] - item['price']).toFixed(3);
   })
   initialData = initialData.slice(-10)
   // initialData = initialData.filter((item) => item.date == date && item.centerId == testcenterID)
@@ -41,6 +41,7 @@ export default function Home({ initialData }) {
               <XAxis dataKey="date" />
               <YAxis domain={['dataMin', 'dataMax']} />
               <Tooltip />
+              {/* <Tooltip content={<CustomTooltip />} /> */}
               <Line type="monotone" dataKey="price" stroke="#8884d8" />
               <Line type="basis" dataKey="prediction" stroke="#82ca9d" />
               {/* <Line type="basis" dataKey="difference" stroke="#eba959" /> */}
