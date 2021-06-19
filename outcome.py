@@ -13,4 +13,4 @@ with open('trendOutput.csv', mode='r') as csv_file:
         total = line_count - 1
         accuracy = ( correct / total ) * 100
         print(f"correct {correct} total {total} accuracy {accuracy}")
-        csv_reader.close()
+        csv_file.close()

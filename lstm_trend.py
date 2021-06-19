@@ -155,6 +155,7 @@ def run():
     earlier_predictDate = earlier_date.strftime("%Y-%m-%d %H:%M:%S")
     earlier_actual_price = 0
     actual_price = 0
+    api_url = f'https://api.nomics.com/v1/currencies/ticker?key={config.getApiKey("nomics")}&ids=BTC&interval=1d&convert=USD&per-page=100&page=1'
     print(
         f"earlier_predictDate: {earlier_predictDate} predictDate: {predictDate} predicted_rate: {predicted_rate}")
     while True:
@@ -164,11 +165,10 @@ def run():
             if counter == 0:
                 counter = counter + 1
                 try:
-                    r = requests.get(
-                        url="https://data.messari.io/api/v1/assets/btc/metrics")
+                    r = requests.get(url=api_url)
                     json_data = r.json()
                     earlier_actual_price = float(
-                        format(float(json_data['data']['market_data']['price_usd']), ".6f"))
+                        format(float(json_data[0]['price']), ".6f"))
                     print(f"earlier_actual_price {earlier_actual_price}")
                     while True:
                         dateString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -176,11 +176,10 @@ def run():
                             if counter == 1:
                                 counter = counter + 1
                                 try:
-                                    r = requests.get(
-                                        url="https://data.messari.io/api/v1/assets/btc/metrics")
+                                    r = requests.get(url=api_url)
                                     json_data = r.json()
                                     actual_price = float(
-                                        format(float(json_data['data']['market_data']['price_usd']), ".6f"))
+                                        format(float(json_data[0]['price']), ".6f"))
                                     print(f"actual_price {actual_price}")
                                     actual_rate = (
                                         float(actual_price) - float(earlier_actual_price)) / float(actual_price)
@@ -203,13 +202,13 @@ def run():
                                         )
                                         print("inside while ending")
                                         break
-                                except:
-                                    print("error on getting actual price")
+                                except Exception as e: 
+                                    print(e)
                                     break
                     print("outside while ending")
                     break
-                except:
-                    print("error on getting earlier_actual price")
+                except Exception as e: 
+                    print(e)
                     break
 
     # plt.title('BTC Price Prediction')
