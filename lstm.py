@@ -72,8 +72,8 @@ class LSTM(nn.Module):
         out = self.fc(out[:, -1, :]) 
         return out
 
-def run():
-    df_btc=pd.read_csv("nomicsNew.csv", parse_dates=True,index_col=0)
+def run(source):
+    df_btc=pd.read_csv(source + ".csv", parse_dates=True,index_col=0)
     last_date = df_btc.index[-1]
     scaler = MinMaxScaler(feature_range=(-1, 1))
     df_btc['Price'] = scaler.fit_transform(df_btc['Price'].values.reshape(-1,1))
@@ -184,7 +184,7 @@ def run():
                     break
 
 
-
+run("nomics")
     # plt.title('BTC Price Prediction')
     # plt.xlabel('Time')
     # plt.ylabel('BTC Price')

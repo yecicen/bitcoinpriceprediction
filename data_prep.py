@@ -33,7 +33,7 @@ def prepare():
         fieldnames = ['Date', 'Price']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        slicedData = data[-240:]
+        slicedData = data[-120:]
         for line in slicedData:
             writer.writerow(
             {

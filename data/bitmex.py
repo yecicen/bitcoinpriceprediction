@@ -6,15 +6,16 @@ from json import dumps as jsenc
 from json import loads as jsdec
 from pickle import dump
 import csv
+import constants
 
 errorCount = 0
 data = {}
-websocket_url = "wss://www.bitmex.com/realtime?subscribe=orderBook10:XBTUSD"
-subTopic = "orderBook10:XBTUSD"
-system('title ' + websocket_url + " channel:" + subTopic)
+# websocket_url = "wss://www.bitmex.com/realtime?subscribe=orderBook10:XBTUSD"
+# subTopic = "orderBook10:XBTUSD"
+system('title ' + constants.BITMEX_WEBSOCKET_URL + " channel:" + constants.BITMEX_SUB_TOPIC)
 
 async def runWS():
-    async with websockets.connect(websocket_url) as websocket:
+    async with websockets.connect(constants.BITMEX_WEBSOCKET_URL) as websocket:
         global gCount
         global data
         start =datetime.now().time()
@@ -56,7 +57,7 @@ async def runWS():
                     start=datetime.now().time()
                     yesterdate=date.today()
                     #you can save the information to file
-                    with open('bitmax.csv', mode='a') as csv_file:
+                    with open('bitmex.csv', mode='a') as csv_file:
                         fieldnames = ['timestamp', 'askprice', 'bidprice', 'superprice']
                         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                         if not header_added:
@@ -83,4 +84,3 @@ def run():
         time.sleep(60.0)
         run()
 
-run()

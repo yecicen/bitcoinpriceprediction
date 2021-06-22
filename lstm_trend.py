@@ -132,9 +132,9 @@ def run():
     # calculate root mean squared error
     trainScore = math.sqrt(mean_squared_error(
         y_train[:, 0], y_train_pred[:, 0]))
-    print('Train Score: %.2f RMSE' % (trainScore))
+    print('Train Score: %.3f RMSE' % (trainScore))
     testScore = math.sqrt(mean_squared_error(y_test[:, 0], y_test_pred[:, 0]))
-    print('Test Score: %.2f RMSE' % (testScore))
+    print('Test Score: %.3f RMSE' % (testScore))
 
     # Visualising the results
     # figure, axes = plt.subplots(figsize=(15, 6))
