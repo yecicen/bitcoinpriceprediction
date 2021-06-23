@@ -37,7 +37,7 @@ export default function Home({ initialData }) {
       let respond = await fetch(url);
       let newData = await respond.json();
 
-      newData = newData.slice(-60)
+      newData = newData.slice(-2400)
       newData.map(item => {
         item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14, 16)}`;
         item.price = item['price'].toFixed(3);
