@@ -32,3 +32,4 @@ def run():
         except:
                 time.sleep(30.0)
 
+run()

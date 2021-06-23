@@ -5,8 +5,8 @@ import lstm
 import data_provider
 
 source ="nomics"
-data_provider.preparePredictionData()
-data_provider.prepareTrendData()
+data_provider.preparePredictionData("nomics")
+# data_provider.prepareTrendData()
 while True:
     lstm.run(source)
     time.sleep(10.0)

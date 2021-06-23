@@ -87,5 +87,3 @@ def prepareTrendData(data_source):
                 "Rate": rate
             })
     print(f"data prepared successfully, last prediction date is {prediction_date}")
-
-preparePredictionData("nomics")

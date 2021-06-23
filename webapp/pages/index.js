@@ -10,7 +10,7 @@ export async function getServerSideProps(context) {
     }
   })
   let initialData = await res.json()
-  initialData = initialData.slice(-120)
+  initialData = initialData.slice(-2400)
   let diffData = []
   initialData.map(item => {
     item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14, 16)}`;
