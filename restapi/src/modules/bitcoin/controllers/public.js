@@ -4,18 +4,6 @@ const create = async (req, res, next) => {
   try {
     const bitcoin = await Bitcoin.create(req.body);
     if (bitcoin) {
-      // try {
-      //   const timeSlot = await Timeslot.findOne(
-      //     { _id: req.body.timeslotId },
-      //   );
-      //   if (timeSlot) {
-      //     timeSlot.seats = timeSlot.seats > 0 ? timeSlot.seats - 1 : 0;
-      //     await timeSlot.save();
-      //   }
-      // } catch (e) {
-      //   console.error(e);
-      // }
-
       res.send(bitcoin);
     } else {
       res.status(500).send({ msg: 'NOT_CREATED' });
@@ -28,6 +16,14 @@ const create = async (req, res, next) => {
 const getAll = async (req, res, next) => {
   try {
     const bitcoins = await Bitcoin.find({});
+    res.send(bitcoins);
+  } catch (error) {
+    next(error);
+  }
+};
+const getLastNRecords = async (req, res, next ) => {
+  try {
+    const bitcoins = await Bitcoin.find({}).sort({"timestamp":-1}).limit(2400);
     res.send(bitcoins);
   } catch (error) {
     next(error);
@@ -50,5 +46,6 @@ const getById = async (req, res, next) => {
 module.exports = {
   create,
   getAll,
+  getLastNRecords,
   getById,
 };
