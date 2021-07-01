@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-import CustomTooltip from '../components/customTooltip'
+import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+
+
 let url = 'https://bitcoinpriceprediction-mu.herokuapp.com/api/bitcoin';
 export async function getServerSideProps(context) {
   const res = await fetch(url, {
@@ -42,6 +43,16 @@ export default function Home({ initialData }) {
 
   }, 60000)
 
+  const handleSwitch = (event) => {
+    if (event.target.checked) {
+      setDarkTheme(true);
+    }
+    else {
+      setDarkTheme(false);
+    }
+  }
+
+
   return (
     <div className={
       "flex flex-col items-center justify-center min-h-screen py-2 "
@@ -50,9 +61,19 @@ export default function Home({ initialData }) {
         <title>Bitcoin Price Prediction</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className={"h-20 text-xl text-center " + (darkTheme ? "text-white" : "")}>
-        Bitcoin Price Prediction using an LSTM Model
-      </h1>
+      <div>
+        <div className={"h-20 text-xl text-center " + (darkTheme ? "text-white" : "")}>
+          Bitcoin Price Prediction using an LSTM Model
+          <div className="switch">
+            <div className="theme-switch-wrapper">
+              <label className="theme-switch" htmlFor="checkbox">
+                <input onChange={handleSwitch} type="checkbox" id="checkbox" />
+                <div className="slider round" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
       <main className="flex flex-col items-center justify-center w-full md:w-2/3 px-5 md:px-20 flex-1 text-center">
 
         <ResponsiveContainer height={500}>
@@ -62,21 +83,19 @@ export default function Home({ initialData }) {
             <XAxis dataKey="date" />
             <YAxis domain={['dataMin', 'dataMax']} />
             <Tooltip />
-            {/* <Tooltip content={<CustomTooltip />} /> */}
-            <Line type="monotone" dataKey="price" stroke="#8884d8" />
-            <Line type="basis" dataKey="prediction" stroke="#82ca9d" />
-            {/* <Line type="basis" dataKey="difference" stroke="#eba959" /> */}
-            {/* <Line type="step" dataKey="source" stroke="red" /> */}
+            <Legend />
+            <Line type="monotone" dataKey="price" stroke="#8884d8" dot={false} />
+            <Line type="basis" dataKey="prediction" stroke="#82ca9d" dot={false} />
           </LineChart>
         </ResponsiveContainer>
 
       </main>
 
       <footer className={
-        "flex items-center justify-center w-full h-24 border-t flex-col" 
+        "flex items-center justify-center w-full h-24 border-t flex-col "
         + (darkTheme ? "text-white" : "")}>
-        <div><p>Developed by @yecicen</p> </div>
-        <div><a href="https://github.com/yecicen/bitcoinpriceprediction">Source Code</a></div>
+        <p>Developed by <a href="https://yecicen.dev"> Yunus Emre Çiçen </a></p>
+        <a href="https://github.com/yecicen/bitcoinpriceprediction">Click here for the source code</a>
       </footer>
     </div>
   )
