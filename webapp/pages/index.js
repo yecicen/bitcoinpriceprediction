@@ -19,45 +19,40 @@ export async function getServerSideProps(context) {
     item['difference'] = Number(Math.abs(Number(item['prediction']) - Number(item['price'])).toFixed(3));
     diffData.push(item['difference'])
   })
-  // initialData = initialData.filter((item) => item.date == date && item.centerId == testcenterID)
-  console.log(Math.max( ...diffData))
   return { props: { initialData } }
 }
 
-const getMax = (data) => {
-  // let min = Math.min( ...data );
-  // let max = Math.max( ...data );
-  // difference = max - min;
-  return Math.max( ...data );
-}
 
 export default function Home({ initialData }) {
   const [data, setData] = useState(initialData);
+  const [darkTheme, setDarkTheme] = useState(false)
   setTimeout(async () => {
-      let respond = await fetch(url);
-      let newData = await respond.json();
+    let respond = await fetch(url);
+    let newData = await respond.json();
 
-      newData = newData.slice(-2400)
-      newData.map(item => {
-        item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14, 16)}`;
-        item.price = item['price'].toFixed(3);
-        item.prediction = item['prediction'].toFixed(3);
-        item['difference'] = Math.abs(item['prediction'] - item['price']).toFixed(3);
-      });
+    newData = newData.slice(-2400)
+    newData.map(item => {
+      item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14, 16)}`;
+      item.price = item['price'].toFixed(3);
+      item.prediction = item['prediction'].toFixed(3);
+      item['difference'] = Math.abs(item['prediction'] - item['price']).toFixed(3);
+    });
 
-      setData(newData);
-    
+    setData(newData);
+
   }, 60000)
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 ">
+    <div className={
+      "flex flex-col items-center justify-center min-h-screen py-2 "
+      + (darkTheme ? "bg-gray-900" : "")}>
       <Head>
         <title>Bitcoin Price Prediction</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="h-20 text-xl text-center">Bitcoin Price Prediction using LSTM Model</h1>
-      {/* <h1 className="h-20 text-xl text-center">Max: {getMax( diffData )}</h1> */}
-      {/* <h1 className="h-20 text-xl text-center">Min: {Math.min( ...data['difference'] )}</h1> */}
+      <h1 className={"h-20 text-xl text-center " + (darkTheme ? "text-white" : "")}>
+        Bitcoin Price Prediction using an LSTM Model
+      </h1>
       <main className="flex flex-col items-center justify-center w-full md:w-2/3 px-5 md:px-20 flex-1 text-center">
 
         <ResponsiveContainer height={500}>
@@ -77,8 +72,11 @@ export default function Home({ initialData }) {
 
       </main>
 
-      <footer className="flex items-center justify-center w-full h-24 border-t ">
-        Developed by @yecicen
+      <footer className={
+        "flex items-center justify-center w-full h-24 border-t flex-col" 
+        + (darkTheme ? "text-white" : "")}>
+        <div><p>Developed by @yecicen</p> </div>
+        <div><a href="https://github.com/yecicen/bitcoinpriceprediction">Source Code</a></div>
       </footer>
     </div>
   )
