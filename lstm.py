@@ -184,7 +184,7 @@ def run(source):
                     break
 
 
-run("nomics")
+# run("nomics")
     # plt.title('BTC Price Prediction')
     # plt.xlabel('Time')
     # plt.ylabel('BTC Price')

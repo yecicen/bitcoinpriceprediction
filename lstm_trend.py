@@ -73,8 +73,8 @@ class LSTM(nn.Module):
         return out
 
 
-def run():
-    df_btc = pd.read_csv("updown.csv", parse_dates=True, index_col=0)
+def run(source):
+    df_btc = pd.read_csv(source + "_Trend"+".csv", parse_dates=True, index_col=0)
     last_date = df_btc.index[-1]
     earlier_date = df_btc.index[-2]
     scaler = MinMaxScaler(feature_range=(-1, 1))
@@ -202,12 +202,12 @@ def run():
                                         )
                                         print("inside while ending")
                                         break
-                                except Exception as e: 
+                                except Exception as e:
                                     print(e)
                                     break
                     print("outside while ending")
                     break
-                except Exception as e: 
+                except Exception as e:
                     print(e)
                     break
 

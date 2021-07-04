@@ -11,7 +11,7 @@ export async function getServerSideProps(context) {
     }
   })
   let initialData = await res.json()
-  initialData = initialData.slice(-2400)
+  initialData = initialData.reverse().slice(-480)
   let diffData = []
   initialData.map(item => {
     item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14, 16)}`;
@@ -31,7 +31,7 @@ export default function Home({ initialData }) {
     let respond = await fetch(url);
     let newData = await respond.json();
 
-    newData = newData.slice(-2400)
+    newData = newData.reverse().slice(-480)
     newData.map(item => {
       item.date = `${item['date'].substring(11, 13)}:${item['date'].substring(14, 16)}`;
       item.price = item['price'].toFixed(3);

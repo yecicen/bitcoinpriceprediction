@@ -1,10 +1,11 @@
 import time
-import data_updown
+import data_provider
 import lstm_trend
+
+source ="nomics"
+data_provider.prepareTrendData(source)
 while True:
-    print("running lstm model")
-    lstm_trend.run()
-    print("finishing lstm model")
+    lstm_trend.run(source)
     time.sleep(10.0)
-    print("preparing data again")
-    data_updown.prepare()
+    data_provider.prepareTrendData(source)
+
