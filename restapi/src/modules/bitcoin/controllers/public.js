@@ -23,7 +23,7 @@ const getAll = async (req, res, next) => {
 };
 const getLastNRecords = async (req, res, next ) => {
   try {
-    const bitcoins = await Bitcoin.find({}).sort({"timestamp":-1}).limit(2400);
+    const bitcoins = await Bitcoin.find({}).sort({"timestamp":-1}).limit(480);
     res.send(bitcoins);
   } catch (error) {
     next(error);

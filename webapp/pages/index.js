@@ -94,8 +94,8 @@ export default function Home({ initialData }) {
       <footer className={
         "flex items-center justify-center w-full h-24 border-t flex-col "
         + (darkTheme ? "text-white" : "")}>
-        <p>Developed by <a href="https://yecicen.dev"> Yunus Emre Çiçen </a></p>
-        <a href="https://github.com/yecicen/bitcoinpriceprediction">Click here for the source code</a>
+        <p>Developed by <a href="https://yecicen.dev" className="font-semibold"> Yunus Emre Çiçen </a></p>
+        <a href="https://github.com/yecicen/bitcoinpriceprediction" className="font-semibold">Click here for the source code</a>
       </footer>
     </div>
   )
