@@ -1,5 +1,5 @@
 import csv
-with open('4hto2min.csv', mode='r') as csv_file:
+with open('trendOutput.csv', mode='r') as csv_file:
 # with open('1hto30sec.csv', mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
@@ -10,7 +10,7 @@ with open('4hto2min.csv', mode='r') as csv_file:
             if(row["predicted_trend"] == row["actual_trend"]):
                 correct = correct + 1
             line_count = line_count + 1
-        total = line_count - 1
+        total = line_count - 2 # loop + header
         accuracy = ( correct / total ) * 100
         print(f"correct {correct} total {total} accuracy {accuracy}")
         csv_file.close()
